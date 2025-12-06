@@ -39,3 +39,7 @@
 
 # debug information files
 *.dwo
+
+cmake-build-debug
+flight_data_2024.csv
+.idea/
