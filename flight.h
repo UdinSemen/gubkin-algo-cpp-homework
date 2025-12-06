@@ -52,5 +52,4 @@ private:
     bool late_aircraft_delay{};
 };
 
-
 #endif //DATASETREADING_FLIGHT_H

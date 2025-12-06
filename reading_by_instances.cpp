@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <ctime>
+#include <csv2/reader.hpp>
 #include "flight.h"
 
 using namespace std;
@@ -81,7 +82,35 @@ int reading_by_strings() {
     cout << "Time taken to read and parse the file: " << difftime(after_read, before_read) << " seconds." << endl;
     return 0;
 }
+
+int reading_by_library() {
+    csv2::Reader<csv2::delimiter<';'>> csv;
+    csv.mmap("../flight_data_2024_semicolon.csv");
+    vector<flight> flights;
+    time_t before_read = time(nullptr);
+    for (const auto &row: csv) {
+        if (row.length() == 0)
+            continue;
+        vector<string> parts;
+        for (const auto cell: row) {
+            string value;
+            cell.read_value(value);
+            if (value.empty())
+                parts.emplace_back("0");
+            else
+                parts.emplace_back(value);
+        }
+        flight current_flight;
+        current_flight.by_slices(parts);
+        flights.emplace_back(current_flight);
+    }
+    time_t after_read = time(nullptr);
+    cout << "Time taken to read and parse the file: " << difftime(after_read, before_read) << " seconds." << endl;
+    return 0;
+}
+
 int main() {
     // return reading_by_instances();
-    return reading_by_strings();
+    // return reading_by_strings();
+    return reading_by_library();
 }
