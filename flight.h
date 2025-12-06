@@ -6,10 +6,13 @@
 #define DATASETREADING_FLIGHT_H
 #pragma once
 #include <string>
+#include <vector>
 
 class flight {
 public:
-    explicit flight(const std::string &parts);
+    flight();
+    void by_instances(const std::string &parts);
+    void by_slices(const std::vector<std::string> &parts);
     void print();
 
 private:
