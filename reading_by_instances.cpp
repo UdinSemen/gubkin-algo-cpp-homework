@@ -27,7 +27,7 @@ string parse_line(const string &line) {
     return ss.str();
 }
 
-int main() {
+int reading_by_instances() {
     ifstream fin("../flight_data_2024_semicolon.csv");
     if (!fin.is_open()) {
         cout << "File is unavailable to load" << endl;

@@ -3,6 +3,6 @@ project(DatasetReading)
 
 set(CMAKE_CXX_STANDARD 26)
 
-add_executable(DatasetReading main.cpp
+add_executable(DatasetReading reading_by_instances.cpp
         flight.h
         flight.cpp)
