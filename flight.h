@@ -4,7 +4,6 @@
 
 #ifndef DATASETREADING_FLIGHT_H
 #define DATASETREADING_FLIGHT_H
-#pragma once
 #include <string>
 #include <vector>
 
