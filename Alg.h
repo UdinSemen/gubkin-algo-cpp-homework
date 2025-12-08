@@ -1,5 +1,6 @@
 #pragma once
 #include<set>
+#include<algorithm>
 using namespace std;
 
 template<typename T>
@@ -17,10 +18,37 @@ set linear_search(const vector<flight> &flights,T flight::*member,const T &searc
 
 temlpate<typename T>
 set binary_search(const vector<flight>& flights, T flight::* member, const T& searched_elem) { // only works for sorted flights
-	set<int> result;
-	bot = 0;
-	top = flights.size() - 1;
+	set<float> result;
+	/*sort(flights.begin(), flights.end(),
+		[](const flight& a, const flight& b) {
+			return a.*member < b.*member;
+		});*/ //usage of sort depends on whether or not search get already sorted vector
+
+	int bot = 0;
+	int top = flights.size() - 1;
 	while (bot <= top) {
-	 
+		int mid = bot + (top-bot) / 2;
+		if (flights[mid].*member == searched_elem) {
+			int i = mid;
+			while (i >= 0 && flights[i].*member == searched_elem)
+			{
+				result.insert(flights[i].flight_number);
+				i--;
+			}
+			i = mid + 1;
+			while (i < flights.size() && flights[i].*member == searched_elem)
+			{
+				result.insert(flights[i].flight_number);
+				i++;
+			}
+			return result;ô
+		}
+		if (flights[mid].*member < searched_elem) {
+			bot = mid+1;
+		}
+		if (flights[mid].*member > searched_elem) {
+			top = mid-1;
+		}
 	}
+	return result;
 }
