@@ -4,21 +4,21 @@
 using namespace std;
 
 template<typename T>
-set<int> linear_search(const vector<flight> &flights,T flight::*member,const T &searched_elem) {
-	set<int> result;
+set<flight> linear_search(const vector<flight> &flights,T flight::*member,const T &searched_elem) {
+	set<flight> result;
 	for (int i = 0; i < flights.size(); i++)
 	{
 		if (flights[i].*member == searched_elem)
 		{
-			result.insert(i);
+			result.insert(flights[i]);
 		}
 	}
 	return result;
 }
 
 temlpate<typename T>
-set<float> binary_search(const vector<flight>& flights, T flight::* member, const T& searched_elem) { // only works for sorted flights
-	set<float> result;
+set<flight> binary_search(const vector<flight>& flights, T flight::* member, const T& searched_elem) { // only works for sorted flights
+	set<flight> result;
 	/*sort(flights.begin(), flights.end(),
 		[](const flight& a, const flight& b) {
 			return a.*member < b.*member;
@@ -32,13 +32,13 @@ set<float> binary_search(const vector<flight>& flights, T flight::* member, cons
 			int i = mid;
 			while (i >= 0 && flights[i].*member == searched_elem)
 			{
-				result.insert(flights[i].flight_number);
+				result.insert(flights[i]);
 				i--;
 			}
 			i = mid + 1;
 			while (i < flights.size() && flights[i].*member == searched_elem)
 			{
-				result.insert(flights[i].flight_number);
+				result.insert(flights[i]);
 				i++;
 			}
 			return result;
@@ -54,8 +54,8 @@ set<float> binary_search(const vector<flight>& flights, T flight::* member, cons
 }
 
 template<typename T>
-set<float> Fibonachi_search(const vector<flight>& flights, T flight::* member, const T& searched_elem) { //only works for sorted vectors
-	set<float> result;
+set<flight> Fibonachi_search(const vector<flight>& flights, T flight::* member, const T& searched_elem) { //only works for sorted vectors
+	set<flight> result;
 	/*sort(flights.begin(), flights.end(),
 		[](const flight& a, const flight& b) {
 			return a.*member < b.*member;
@@ -89,13 +89,13 @@ set<float> Fibonachi_search(const vector<flight>& flights, T flight::* member, c
 			int i1 = i;
 			while (i1 >= 0 && flights[i1].*member == searched_elem)
 			{
-				result.insert(flights[i1].flight_number);
+				result.insert(flights[i1]);
 				i1--;
 			}
 			i1 = i + 1;
 			while (i1 < flights.size() && flights[i1].*member == searched_elem)
 			{
-				result.insert(flights[i1].flight_number);
+				result.insert(flights[i1]);
 				i1++;
 			}
 			return result;
