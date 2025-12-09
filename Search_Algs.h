@@ -2,6 +2,7 @@
 #include<vector>
 #include "flight.h"
 #include<algorithm>
+#include<ctime>
 using namespace std;
 
 template<typename T>
@@ -14,6 +15,7 @@ vector<flight> linear_search(const vector<flight> &flights,T flight::*member,con
 			result.push_back(flights[i]);
 		}
 	}
+
 	return result;
 }
 
@@ -26,9 +28,13 @@ vector<flight> binary_search(const vector<flight>& flights,T flight::* member, c
 		});*/ //usage of sort depends on whether or not search get already sorted vector
 
 	int bot = 0;
-	int top = flights.size() - 1;
+	int top = static_cast<int>(flights.size() - 1);
 	while (bot <= top) {
+		
 		int mid = bot + (top-bot) / 2;
+		if (mid < 0 || mid >= flights.size()) {
+			break;
+		}
 		if (flights[mid].*member == searched_elem) {
 			int i = mid;
 			while (i >= 0 && flights[i].*member == searched_elem)
