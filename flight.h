@@ -1,18 +1,21 @@
-//
-// Created by Дмитрий Егорычев
-//
-
 #ifndef DATASETREADING_FLIGHT_H
 #define DATASETREADING_FLIGHT_H
+
 #include <string>
 #include <vector>
 
 class flight {
 public:
     flight();
-    void by_instances(const std::string &parts);
-    void by_slices(const std::vector<std::string> &parts);
+    void by_instances(const std::string& parts);
+    void by_slices(const std::vector<std::string>& parts);
     void print();
+
+    bool operator==(const flight& other) const;
+    std::string get_unique_key() const;
+
+    const std::string& get_carrier_id() const { return carrier_id; }
+    float get_flight_number() const { return flight_number; }
 
 private:
     int year{};
@@ -50,5 +53,14 @@ private:
     bool security_delay{};
     bool late_aircraft_delay{};
 };
+
+namespace std {
+    template<>
+    struct hash<flight> {
+        size_t operator()(const flight& f) const {
+            return hash<string>()(f.get_unique_key());
+        }
+    };
+}
 
 #endif //DATASETREADING_FLIGHT_H
