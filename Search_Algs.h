@@ -1,24 +1,25 @@
 #pragma once
-#include<set>
+#include<vector>
+#include "flight.h"
 #include<algorithm>
 using namespace std;
 
 template<typename T>
-set<flight> linear_search(const vector<flight> &flights,T flight::*member,const T &searched_elem) {
-	set<flight> result;
+vector<flight> linear_search(const vector<flight> &flights,T flight::*member,const T &searched_elem) {
+	vector<flight> result;
 	for (int i = 0; i < flights.size(); i++)
 	{
 		if (flights[i].*member == searched_elem)
 		{
-			result.insert(flights[i]);
+			result.push_back(flights[i]);
 		}
 	}
 	return result;
 }
 
-temlpate<typename T>
-set<flight> binary_search(const vector<flight>& flights, T flight::* member, const T& searched_elem) { // only works for sorted flights
-	set<flight> result;
+template<typename T>
+vector<flight> binary_search(const vector<flight>& flights,T flight::* member, const T& searched_elem) { // only works for sorted flights
+	vector<flight> result;
 	/*sort(flights.begin(), flights.end(),
 		[](const flight& a, const flight& b) {
 			return a.*member < b.*member;
@@ -32,13 +33,13 @@ set<flight> binary_search(const vector<flight>& flights, T flight::* member, con
 			int i = mid;
 			while (i >= 0 && flights[i].*member == searched_elem)
 			{
-				result.insert(flights[i]);
+				result.push_back(flights[i]);
 				i--;
 			}
 			i = mid + 1;
 			while (i < flights.size() && flights[i].*member == searched_elem)
 			{
-				result.insert(flights[i]);
+				result.push_back(flights[i]);
 				i++;
 			}
 			return result;
@@ -54,8 +55,8 @@ set<flight> binary_search(const vector<flight>& flights, T flight::* member, con
 }
 
 template<typename T>
-set<flight> Fibonachi_search(const vector<flight>& flights, T flight::* member, const T& searched_elem) { //only works for sorted vectors
-	set<flight> result;
+vector<flight> Fibonachi_search(const vector<flight>& flights, T flight::* member, const T& searched_elem) { //only works for sorted vectors
+	vector<flight> result;
 	/*sort(flights.begin(), flights.end(),
 		[](const flight& a, const flight& b) {
 			return a.*member < b.*member;
@@ -89,13 +90,13 @@ set<flight> Fibonachi_search(const vector<flight>& flights, T flight::* member, 
 			int i1 = i;
 			while (i1 >= 0 && flights[i1].*member == searched_elem)
 			{
-				result.insert(flights[i1]);
+				result.push_back(flights[i1]);
 				i1--;
 			}
 			i1 = i + 1;
 			while (i1 < flights.size() && flights[i1].*member == searched_elem)
 			{
-				result.insert(flights[i1]);
+				result.push_back(flights[i1]);
 				i1++;
 			}
 			return result;
