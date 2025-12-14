@@ -7,7 +7,7 @@
 using namespace std;
 
 template<typename T, typename Getter>
-vector<flight> linear_search(const vector<flight> &flights,Getter getter,const T &searched_elem) {
+vector<flight> linear_search(const vector<flight>& flights, Getter getter, const T& searched_elem) {
 	vector<flight> result;
 	for (const auto& item : flights)
 	{
@@ -21,28 +21,28 @@ vector<flight> linear_search(const vector<flight> &flights,Getter getter,const T
 }
 
 template<typename T, typename Getter>
-vector<flight> binary_search(const vector<flight>& flights,Getter getter, const T& searched_elem) { // only works for sorted flights
+vector<flight> binary_search(const vector<flight>& flights, Getter getter, const T& searched_elem) { // only works for sorted flights
 	vector<flight> result;
 
 	int bot = 0;
 	int top = static_cast<int>(flights.size() - 1);
 	while (bot <= top) {
-		
-		int mid = bot + (top-bot) / 2;
 
-		const auto midVal = getter(flights[mid]);
+		int mid = bot + (top - bot) / 2;
+
+		auto midVal = getter(flights[mid]);
 		if (mid < 0 || mid >= flights.size()) {
 			break;
 		}
 		if (midVal == searched_elem) {
 			int i = mid;
-			while (i >= 0 && midVal == searched_elem)
+			while (i >= 0 && getter(flights[i]) == searched_elem)
 			{
 				result.push_back(flights[i]);
 				i--;
 			}
 			i = mid + 1;
-			while (i < flights.size() && midVal == searched_elem)
+			while (i < flights.size() && getter(flights[i]) == searched_elem)
 			{
 				result.push_back(flights[i]);
 				i++;
@@ -50,10 +50,10 @@ vector<flight> binary_search(const vector<flight>& flights,Getter getter, const 
 			return result;
 		}
 		if (midVal < searched_elem) {
-			bot = mid+1;
+			bot = mid + 1;
 		}
 		if (midVal > searched_elem) {
-			top = mid-1;
+			top = mid - 1;
 		}
 	}
 	return result;
@@ -75,7 +75,7 @@ vector<flight> Fibonacci_search(const vector<flight>& flights, Getter getter, co
 
 	while (c > 1) {
 		int i = min(elim + a, n - 1);
-		const auto iVal = getter(flights[i]);
+		auto iVal = getter(flights[i]);
 		if (iVal < searched_elem) {
 			c = b;
 			b = a;
@@ -90,20 +90,22 @@ vector<flight> Fibonacci_search(const vector<flight>& flights, Getter getter, co
 		}
 		else {
 			int i1 = i;
-			const auto finVal = getter(flights[i1]);
-			while (i1 >= 0 && finVal == searched_elem)
+			auto finVal = getter(flights[i1]);
+			while (i1 >= 0 && getter(flights[i1]) == searched_elem)
 			{
+
 				result.push_back(flights[i1]);
 				i1--;
 			}
 			i1 = i + 1;
-			while (i1 < flights.size() && finVal == searched_elem)
+			while (i1 < flights.size() && getter(flights[i1]) == searched_elem)
 			{
+
 				result.push_back(flights[i1]);
 				i1++;
 			}
 			return result;
-		
+
 		}
 	}
 	return result;
