@@ -2,71 +2,66 @@
 #include<vector>
 #include "flight.h"
 #include<algorithm>
+#include<string>
 #include<ctime>
 using namespace std;
 
-template<typename T>
-vector<flight> linear_search(const vector<flight> &flights,T flight::*member,const T &searched_elem) {
+template<typename T, typename Getter>
+vector<flight> linear_search(const vector<flight> &flights,Getter getter,const T &searched_elem) {
 	vector<flight> result;
-	for (int i = 0; i < flights.size(); i++)
+	for (const auto& item : flights)
 	{
-		if (flights[i].*member == searched_elem)
+		if (getter(item) == searched_elem)
 		{
-			result.push_back(flights[i]);
+			result.push_back(item);
 		}
 	}
 
 	return result;
 }
 
-template<typename T>
-vector<flight> binary_search(const vector<flight>& flights,T flight::* member, const T& searched_elem) { // only works for sorted flights
+template<typename T, typename Getter>
+vector<flight> binary_search(const vector<flight>& flights,Getter getter, const T& searched_elem) { // only works for sorted flights
 	vector<flight> result;
-	/*sort(flights.begin(), flights.end(),
-		[](const flight& a, const flight& b) {
-			return a.*member < b.*member;
-		});*/ //usage of sort depends on whether or not search get already sorted vector
 
 	int bot = 0;
 	int top = static_cast<int>(flights.size() - 1);
 	while (bot <= top) {
 		
 		int mid = bot + (top-bot) / 2;
+
+		const auto midVal = getter(flights[mid]);
 		if (mid < 0 || mid >= flights.size()) {
 			break;
 		}
-		if (flights[mid].*member == searched_elem) {
+		if (midVal == searched_elem) {
 			int i = mid;
-			while (i >= 0 && flights[i].*member == searched_elem)
+			while (i >= 0 && midVal == searched_elem)
 			{
 				result.push_back(flights[i]);
 				i--;
 			}
 			i = mid + 1;
-			while (i < flights.size() && flights[i].*member == searched_elem)
+			while (i < flights.size() && midVal == searched_elem)
 			{
 				result.push_back(flights[i]);
 				i++;
 			}
 			return result;
 		}
-		if (flights[mid].*member < searched_elem) {
+		if (midVal < searched_elem) {
 			bot = mid+1;
 		}
-		if (flights[mid].*member > searched_elem) {
+		if (midVal > searched_elem) {
 			top = mid-1;
 		}
 	}
 	return result;
 }
 
-template<typename T>
-vector<flight> Fibonachi_search(const vector<flight>& flights, T flight::* member, const T& searched_elem) { //only works for sorted vectors
+template<typename T, typename Getter>
+vector<flight> Fibonacci_search(const vector<flight>& flights, Getter getter, const T& searched_elem) { //only works for sorted vectors
 	vector<flight> result;
-	/*sort(flights.begin(), flights.end(),
-		[](const flight& a, const flight& b) {
-			return a.*member < b.*member;
-		});*/ //usage of sort depends on whether or not search get already sorted vector
 	int n = flights.size();
 
 	int a = 0, b = 0, c = 1;
@@ -80,27 +75,29 @@ vector<flight> Fibonachi_search(const vector<flight>& flights, T flight::* membe
 
 	while (c > 1) {
 		int i = min(elim + a, n - 1);
-		if (flights[i].*member < searched_elem) {
+		const auto iVal = getter(flights[i]);
+		if (iVal < searched_elem) {
 			c = b;
 			b = a;
 			a = c - b;
 			elim = i;
 		}
 
-		else if (flights[i].*member > searched_elem) {
+		else if (iVal > searched_elem) {
 			c = a;
 			b = b - a;
 			a = c - b;
 		}
 		else {
 			int i1 = i;
-			while (i1 >= 0 && flights[i1].*member == searched_elem)
+			const auto finVal = getter(flights[i1]);
+			while (i1 >= 0 && finVal == searched_elem)
 			{
 				result.push_back(flights[i1]);
 				i1--;
 			}
 			i1 = i + 1;
-			while (i1 < flights.size() && flights[i1].*member == searched_elem)
+			while (i1 < flights.size() && finVal == searched_elem)
 			{
 				result.push_back(flights[i1]);
 				i1++;
@@ -110,4 +107,27 @@ vector<flight> Fibonachi_search(const vector<flight>& flights, T flight::* membe
 		}
 	}
 	return result;
+}
+
+std::vector<flight> generateRandomFlights(int count) {
+	std::vector<flight> flights;
+
+	const std::vector<std::string> cities = {
+		"New York", "Los Angeles", "Chicago", "Miami", "Las Vegas", "Seattle", "Boston"
+	};
+
+	const std::vector<float> dist = {
+	   500.0f,1500.0f,2500.0f,3500.0f,4500.0f,5500.0f,1000.0f,2000.0f,3000.0f,4000.0f,5000.0f
+	};
+
+	for (int i = 0; i < count; i++) {
+		flight f;
+		f.setDistance(dist[i % dist.size()]);
+		f.setWeatherDelay(i % 2);
+		f.setOriginCity(cities[i % cities.size()]);
+
+		flights.emplace_back(f);
+	}
+
+	return flights;
 }
