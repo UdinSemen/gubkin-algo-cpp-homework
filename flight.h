@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <tuple>
 
 class flight {
 public:
@@ -12,6 +13,7 @@ public:
     void print();
 
     bool operator==(const flight& other) const;
+    bool operator<(const flight& other) const;
     std::string get_unique_key() const;
 
     const std::string& get_carrier_id() const { return carrier_id; }
