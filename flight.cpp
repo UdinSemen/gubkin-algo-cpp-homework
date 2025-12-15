@@ -94,12 +94,26 @@ void flight::print() {
         << "}\n";
 }
 
-// === Реализация метода сравнения ===
 bool flight::operator==(const flight& other) const {
-    return get_unique_key() == other.get_unique_key();
+    return year == other.year &&
+        month == other.month &&
+        month_day == other.month_day &&
+        carrier_id == other.carrier_id &&
+        flight_number == other.flight_number &&
+        origin_code == other.origin_code &&
+        dest_code == other.dest_code;
 }
 
-// ===  Метод для получения уникального ключа ===
+bool flight::operator<(const flight& other) const {
+    if (carrier_id != other.carrier_id) return carrier_id < other.carrier_id;
+    if (flight_number != other.flight_number) return flight_number < other.flight_number;
+    if (year != other.year) return year < other.year;
+    if (month != other.month) return month < other.month;
+    if (month_day != other.month_day) return month_day < other.month_day;
+    if (origin_code != other.origin_code) return origin_code < other.origin_code;
+    return dest_code < other.dest_code;
+}
+
 std::string flight::get_unique_key() const {
     stringstream ss;
     ss << carrier_id << "_"
