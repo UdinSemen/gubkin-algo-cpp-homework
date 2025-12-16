@@ -80,6 +80,11 @@ public:
     flight();
     void by_instances(const std::string &parts);
     void by_slices(const std::vector<std::string> &parts);
+    void print() const;
+
+    const std::string& get_dest_state() const { return dest_state; }
+    float get_arr_delay() const { return arr_delay; }
+    bool is_canceled() const { return canceled; }
     void setDistance(float d) { distance = d; }
     void setWeatherDelay(bool wd) { weather_delay = wd; }
     void setOriginCity(const std::string& city) { origin_city = city; }
