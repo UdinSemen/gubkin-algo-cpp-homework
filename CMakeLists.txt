@@ -5,6 +5,6 @@ set(CMAKE_CXX_STANDARD 26)
 
 include_directories(include)
 
-add_executable(DatasetReading 
+add_executable(DatasetReading reading_by_instances.cpp
         flight.h
-        flight.cpp  "Reading_for_search.h" "reading_for_search.cpp")
+        flight.cpp)
