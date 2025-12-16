@@ -12,6 +12,12 @@ public:
     flight();
     void by_instances(const std::string &parts);
     void by_slices(const std::vector<std::string> &parts);
+    void setDistance(float d) { distance = d; }
+    void setWeatherDelay(bool wd) { weather_delay = wd; }
+    void setOriginCity(const std::string& city) { origin_city = city; }
+    float getDistance() const { return distance; }
+    bool hasWeatherDelay() const { return weather_delay; }
+    std::string getOriginCity() const{ return origin_city; }
     void print();
 
 private:
