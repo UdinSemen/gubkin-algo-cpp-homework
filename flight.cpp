@@ -1,28 +1,24 @@
-//
-// Created by Дмитрий Егорычев
-//
-
 #include "flight.h"
 #include <iostream>
 #include <sstream>
+#include <iomanip>
 
 using namespace std;
 
-
 flight::flight() = default;
 
-void flight::by_instances(const string &parts) {
+void flight::by_instances(const string& parts) {
     stringstream ss(parts);
     ss >> year >> month >> month_day >> week_day >> carrier_id >> flight_number
-            >> origin_code >> origin_city >> origin_state >> dest_code >> dest_city
-            >> dest_state >> crs_dep_time >> dep_time >> dep_delay >> taxi_out
-            >> wheels_off >> wheels_on >> taxi_in >> crs_arr_time >> arr_time
-            >> arr_delay >> canceled >> cancellation_code >> diverted
-            >> crs_elapsed >> actual_elapsed >> air_time >> distance >> carrier_delay
-            >> weather_delay >> nas_delay >> security_delay >> late_aircraft_delay;
+        >> origin_code >> origin_city >> origin_state >> dest_code >> dest_city
+        >> dest_state >> crs_dep_time >> dep_time >> dep_delay >> taxi_out
+        >> wheels_off >> wheels_on >> taxi_in >> crs_arr_time >> arr_time
+        >> arr_delay >> canceled >> cancellation_code >> diverted
+        >> crs_elapsed >> actual_elapsed >> air_time >> distance >> carrier_delay
+        >> weather_delay >> nas_delay >> security_delay >> late_aircraft_delay;
 }
 
-void flight::by_slices(const vector<string> &parts) {
+void flight::by_slices(const vector<string>& parts) {
     year = stoi(parts[0]);
     month = stoi(parts[1]);
     month_day = stoi(parts[2]);
@@ -61,39 +57,70 @@ void flight::by_slices(const vector<string> &parts) {
 
 void flight::print() {
     cout << "{"
-         << "\"year\": " << year << ", "
-         << "\"month\": " << month << ", "
-         << "\"month_day\": " << month_day << ", "
-         << "\"week_day\": " << week_day << ", "
-         << "\"carrier_id\": " << '\"' << carrier_id << '\"' << ", "
-         << "\"flight_number\": " << flight_number << ", "
-         << "\"origin_code\": " << '\"' << origin_code << '\"' << ", "
-         << "\"origin_city\": " << '\"' << origin_city << '\"' << ", "
-         << "\"origin_state\": " << '\"' << origin_state << '\"' << ", "
-         << "\"dest_code\": " << '\"' << dest_code << '\"' << ", "
-         << "\"dest_city\": " << '\"' << dest_city << '\"' << ", "
-         << "\"dest_state\": " << '\"' << dest_state << '\"' << ", "
-         << "\"crs_dep_time\": " << crs_dep_time << ", "
-         << "\"dep_time\": " << dep_time << ", "
-         << "\"dep_delay\": " << dep_delay << ", "
-         << "\"taxi_out\": " << taxi_out << ", "
-         << "\"wheels_off\": " << wheels_off << ", "
-         << "\"wheels_on\": " << wheels_on << ", "
-         << "\"taxi_in\": " << taxi_in << ", "
-         << "\"crs_arr_time\": " << crs_arr_time << ", "
-         << "\"arr_time\": " << arr_time << ", "
-         << "\"arr_delay\": " << arr_delay << ", "
-         << "\"canceled\": " << canceled << ", "
-         << "\"cancellation_code\": " << '\"' << cancellation_code << '\"' << ", "
-         << "\"diverted\": " << diverted << ", "
-         << "\"crs_elapsed\": " << crs_elapsed << ", "
-         << "\"actual_elapsed\": " << actual_elapsed << ", "
-         << "\"air_time\": " << air_time << ", "
-         << "\"distance\": " << distance << ", "
-         << "\"carrier_delay\": " << carrier_delay << ", "
-         << "\"weather_delay\": " << weather_delay << ", "
-         << "\"nas_delay\": " << nas_delay << ", "
-         << "\"security_delay\": " << security_delay << ", "
-         << "\"late_aircraft_delay\": " << late_aircraft_delay
-         << "}\n";
+        << "\"year\": " << year << ", "
+        << "\"month\": " << month << ", "
+        << "\"month_day\": " << month_day << ", "
+        << "\"week_day\": " << week_day << ", "
+        << "\"carrier_id\": " << '\"' << carrier_id << '\"' << ", "
+        << "\"flight_number\": " << flight_number << ", "
+        << "\"origin_code\": " << '\"' << origin_code << '\"' << ", "
+        << "\"origin_city\": " << '\"' << origin_city << '\"' << ", "
+        << "\"origin_state\": " << '\"' << origin_state << '\"' << ", "
+        << "\"dest_code\": " << '\"' << dest_code << '\"' << ", "
+        << "\"dest_city\": " << '\"' << dest_city << '\"' << ", "
+        << "\"dest_state\": " << '\"' << dest_state << '\"' << ", "
+        << "\"crs_dep_time\": " << crs_dep_time << ", "
+        << "\"dep_time\": " << dep_time << ", "
+        << "\"dep_delay\": " << dep_delay << ", "
+        << "\"taxi_out\": " << taxi_out << ", "
+        << "\"wheels_off\": " << wheels_off << ", "
+        << "\"wheels_on\": " << wheels_on << ", "
+        << "\"taxi_in\": " << taxi_in << ", "
+        << "\"crs_arr_time\": " << crs_arr_time << ", "
+        << "\"arr_time\": " << arr_time << ", "
+        << "\"arr_delay\": " << arr_delay << ", "
+        << "\"canceled\": " << canceled << ", "
+        << "\"cancellation_code\": " << '\"' << cancellation_code << '\"' << ", "
+        << "\"diverted\": " << diverted << ", "
+        << "\"crs_elapsed\": " << crs_elapsed << ", "
+        << "\"actual_elapsed\": " << actual_elapsed << ", "
+        << "\"air_time\": " << air_time << ", "
+        << "\"distance\": " << distance << ", "
+        << "\"carrier_delay\": " << carrier_delay << ", "
+        << "\"weather_delay\": " << weather_delay << ", "
+        << "\"nas_delay\": " << nas_delay << ", "
+        << "\"security_delay\": " << security_delay << ", "
+        << "\"late_aircraft_delay\": " << late_aircraft_delay
+        << "}\n";
+}
+
+bool flight::operator==(const flight& other) const {
+    return year == other.year &&
+        month == other.month &&
+        month_day == other.month_day &&
+        carrier_id == other.carrier_id &&
+        flight_number == other.flight_number &&
+        origin_code == other.origin_code &&
+        dest_code == other.dest_code;
+}
+
+bool flight::operator<(const flight& other) const {
+    if (carrier_id != other.carrier_id) return carrier_id < other.carrier_id;
+    if (flight_number != other.flight_number) return flight_number < other.flight_number;
+    if (year != other.year) return year < other.year;
+    if (month != other.month) return month < other.month;
+    if (month_day != other.month_day) return month_day < other.month_day;
+    if (origin_code != other.origin_code) return origin_code < other.origin_code;
+    return dest_code < other.dest_code;
+}
+
+std::string flight::get_unique_key() const {
+    stringstream ss;
+    ss << carrier_id << "_"
+        << fixed << setprecision(0) << flight_number << "_"
+        << year << "-"
+        << setw(2) << setfill('0') << month << "-"
+        << setw(2) << setfill('0') << month_day << "_"
+        << origin_code << "_" << dest_code;
+    return ss.str();
 }
