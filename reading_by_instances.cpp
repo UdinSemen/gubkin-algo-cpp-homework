@@ -10,36 +10,42 @@
 using namespace std;
 
 string parse_line(const string &line) {
-    istringstream iss(line);
-    string token;
-    vector<string> fields;
-    while (getline(iss, token, ';'))
-        fields.push_back(token);
-    if (!line.empty() && line.back() == ';')
-        fields.emplace_back("");
-    stringstream ss;
-    bool first = true;
-    for (const auto &f: fields) {
-        if (!first) ss << ' ';
-        first = false;
-        if (f.empty()) ss << 0;
-        else ss << f;
+    string result;
+    result.reserve(line.size());
+    bool field_empty = true;
+    for (char c: line) {
+        if (c == ';') {
+            if (!result.empty())
+                result.push_back(' ');
+            if (field_empty)
+                result.push_back('0');
+            field_empty = true;
+        } else {
+            result.push_back(c);
+            field_empty = false;
+        }
     }
-    return ss.str();
+    if (!result.empty())
+        result.push_back(' ');
+    if (field_empty)
+        result.push_back('0');
+    return result;
 }
 
 vector<string> sep_line(const string &line) {
-    istringstream iss(line);
-    string token;
     vector<string> fields;
-    while (getline(iss, token, ';')) {
-        if (token.empty())
-            fields.push_back("0");
-        else
-            fields.push_back(token);
+    fields.reserve(16);
+    size_t start = 0;
+    const size_t n = line.size();
+    for (size_t i = 0; i <= n; ++i) {
+        if (i == n || line[i] == ';') {
+            if (i == start)
+                fields.emplace_back("0");
+            else
+                fields.emplace_back(line.substr(start, i - start));
+            start = i + 1;
+        }
     }
-    if (!line.empty() && line.back() == ';')
-        fields.emplace_back("");
     return fields;
 }
 
@@ -50,16 +56,19 @@ int reading_by_instances() {
         return 1;
     }
     vector<flight> flights;
+    flights.reserve(200000);
     string line;
-    time_t before_read = time(nullptr);
+    auto before_read = std::chrono::steady_clock::now();
     getline(fin, line); // read header
     while (getline(fin, line)) {
         flight current_flight;
         current_flight.by_instances(parse_line(line));
-        flights.emplace_back(current_flight);
+        flights.emplace_back(std::move(current_flight));
     }
-    time_t after_read = time(nullptr);
-    cout << "Time taken to read and parse the file: " << difftime(after_read, before_read) << " seconds." << endl;
+    auto after_read = std::chrono::steady_clock::now();
+    std::chrono::duration<double> elapsed = after_read - before_read;
+    cout << "Time taken to read and parse the file: "
+            << elapsed.count() << " seconds." << endl;
     return 0;
 }
 
@@ -71,23 +80,25 @@ int reading_by_strings() {
     }
     vector<flight> flights;
     string line;
-    time_t before_read = time(nullptr);
+    auto before_read = std::chrono::steady_clock::now();
     getline(fin, line); // read header
     while (getline(fin, line)) {
         flight current_flight;
         current_flight.by_slices(sep_line(line));
         flights.emplace_back(current_flight);
     }
-    time_t after_read = time(nullptr);
-    cout << "Time taken to read and parse the file: " << difftime(after_read, before_read) << " seconds." << endl;
+    auto after_read = std::chrono::steady_clock::now();
+    std::chrono::duration<double> elapsed = after_read - before_read;
+    cout << "Time taken to read and parse the file: "
+            << elapsed.count() << " seconds." << endl;
     return 0;
 }
 
 int reading_by_library() {
-    csv2::Reader<csv2::delimiter<';'>> csv;
+    csv2::Reader<csv2::delimiter<';'> > csv;
     csv.mmap("../flight_data_2024_semicolon.csv");
     vector<flight> flights;
-    time_t before_read = time(nullptr);
+    auto before_read = std::chrono::steady_clock::now();
     for (const auto &row: csv) {
         if (row.length() == 0)
             continue;
@@ -104,8 +115,10 @@ int reading_by_library() {
         current_flight.by_slices(parts);
         flights.emplace_back(current_flight);
     }
-    time_t after_read = time(nullptr);
-    cout << "Time taken to read and parse the file: " << difftime(after_read, before_read) << " seconds." << endl;
+    auto after_read = std::chrono::steady_clock::now();
+    std::chrono::duration<double> elapsed = after_read - before_read;
+    cout << "Time taken to read and parse the file: "
+            << elapsed.count() << " seconds." << endl;
     return 0;
 }
 

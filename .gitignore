@@ -1,6 +1,10 @@
 # Prerequisites
 *.d
 
+# Presentations
+*.pptx
+*.ppt
+
 # Compiled Object files
 *.slo
 *.lo
