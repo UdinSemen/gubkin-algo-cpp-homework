@@ -110,26 +110,3 @@ vector<flight> Fibonacci_search(const vector<flight>& flights, Getter getter, co
 	}
 	return result;
 }
-
-std::vector<flight> generateRandomFlights(int count) {
-	std::vector<flight> flights;
-
-	const std::vector<std::string> cities = {
-		"New York", "Los Angeles", "Chicago", "Miami", "Las Vegas", "Seattle", "Boston"
-	};
-
-	const std::vector<float> dist = {
-	   500.0f,1500.0f,2500.0f,3500.0f,4500.0f,5500.0f,1000.0f,2000.0f,3000.0f,4000.0f,5000.0f
-	};
-
-	for (int i = 0; i < count; i++) {
-		flight f;
-		f.setDistance(dist[i % dist.size()]);
-		f.setWeatherDelay(i % 2);
-		f.setOriginCity(cities[i % cities.size()]);
-
-		flights.emplace_back(f);
-	}
-
-	return flights;
-}
