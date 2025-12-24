@@ -123,9 +123,7 @@ void compare_storage_types(const vector<flight> &all_flights) {
         // Поиск первого элемента
         string search_key = test_data[0].get_unique_key();
         start = steady_clock::now();
-        for (int i = 0; i < 1000; ++i) {
-            organizer.find_in_container(container, search_key);
-        }
+        organizer.find_in_container(container, search_key);
         end = steady_clock::now();
         double search_time = duration_cast<microseconds>(end - start).count() / 1000000.0;
 
@@ -149,9 +147,7 @@ void compare_storage_types(const vector<flight> &all_flights) {
 
         string search_key = test_data[0].get_unique_key();
         start = steady_clock::now();
-        for (int i = 0; i < 1000; ++i) {
-            organizer.find_in_container(container, search_key);
-        }
+        organizer.find_in_container(container, search_key);
         end = steady_clock::now();
         double search_time = duration_cast<microseconds>(end - start).count() / 1000000.0;
 
@@ -175,9 +171,7 @@ void compare_storage_types(const vector<flight> &all_flights) {
 
         string search_key = test_data[0].get_unique_key();
         start = steady_clock::now();
-        for (int i = 0; i < 1000; ++i) {
-            organizer.find_in_container(container, search_key);
-        }
+        organizer.find_in_container(container, search_key);
         end = steady_clock::now();
         double search_time = duration_cast<microseconds>(end - start).count() / 1000000.0;
 
@@ -201,9 +195,7 @@ void compare_storage_types(const vector<flight> &all_flights) {
 
         string search_key = test_data[0].get_unique_key();
         start = steady_clock::now();
-        for (int i = 0; i < 1000; ++i) {
-            auto it = container.find(search_key);
-        }
+        organizer.find_in_container(container, search_key);
         end = steady_clock::now();
         double search_time = duration_cast<microseconds>(end - start).count() / 1000000.0;
 
@@ -227,9 +219,7 @@ void compare_storage_types(const vector<flight> &all_flights) {
 
         string search_key = test_data[0].get_unique_key();
         start = steady_clock::now();
-        for (int i = 0; i < 1000; ++i) {
-            auto it = container.find(search_key);
-        }
+        organizer.find_in_container(container, search_key);
         end = steady_clock::now();
         double search_time = duration_cast<microseconds>(end - start).count() / 1000000.0;
 
@@ -253,9 +243,7 @@ void compare_storage_types(const vector<flight> &all_flights) {
 
         string search_key = test_data[0].get_unique_key();
         start = steady_clock::now();
-        for (int i = 0; i < 1000; ++i) {
-            organizer.find_in_multimap_container(container, search_key);
-        }
+        organizer.find_in_multimap_container(container, search_key);
         end = steady_clock::now();
         double search_time = duration_cast<microseconds>(end - start).count() / 1000000.0;
 
@@ -279,9 +267,7 @@ void compare_storage_types(const vector<flight> &all_flights) {
 
         string search_key = test_data[0].get_unique_key();
         start = steady_clock::now();
-        for (int i = 0; i < 1000; ++i) {
-            organizer.find_in_multimap_container(container, search_key);
-        }
+        organizer.find_in_multimap_container(container, search_key);
         end = steady_clock::now();
         double search_time = duration_cast<microseconds>(end - start).count() / 1000000.0;
 
