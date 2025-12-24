@@ -145,56 +145,6 @@ Graph::DijkstraResult Graph::dijkstra(const std::string& start, const std::strin
     return result;
 }
 
-std::map<std::string, double> Graph::dijkstraAll(const std::string& start) const {
-    std::map<std::string, double> distances;
-
-    if (!hasVertex(start)) {
-        return distances;
-    }
-
-    // Инициализация
-    std::set<std::string> visited;
-    std::priority_queue<PQNode, std::vector<PQNode>, std::greater<PQNode>> pq;
-
-    // Устанавливаем начальные расстояния
-    for (const auto& pair : adjacencyList) {
-        distances[pair.first] = std::numeric_limits<double>::infinity();
-    }
-    distances[start] = 0.0;
-
-    pq.push(PQNode(start, 0.0));
-
-    // Основной цикл Дейкстры
-    while (!pq.empty()) {
-        PQNode current = pq.top();
-        pq.pop();
-
-        std::string currentVertex = current.vertex;
-
-        if (visited.find(currentVertex) != visited.end()) {
-            continue;
-        }
-
-        visited.insert(currentVertex);
-
-        auto neighbors = getNeighbors(currentVertex);
-        for (const auto& edge : neighbors) {
-            if (visited.find(edge.to) != visited.end()) {
-                continue;
-            }
-
-            double newDistance = distances[currentVertex] + edge.weight;
-
-            if (newDistance < distances[edge.to]) {
-                distances[edge.to] = newDistance;
-                pq.push(PQNode(edge.to, newDistance));
-            }
-        }
-    }
-
-    return distances;
-}
-
 void Graph::print() const {
     std::cout << "\nГраф (вершин: " << getVertexCount()
               << ", ребер: " << edgeCount << "):" << std::endl;
