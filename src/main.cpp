@@ -135,7 +135,7 @@ void compare_storage_types(const vector<flight> &all_flights) {
         results.push_back({"vector", insert_time, search_time, mem});
 
         cout << "  Время вставки: " << fixed << setprecision(3) << insert_time << " сек" << endl;
-        cout << "  Время поиска (1000 операций): " << fixed << setprecision(6) << search_time << " сек" << endl;
+        cout << "  Время поиска: " << fixed << setprecision(6) << search_time << " сек" << endl;
         cout << "  Память: ~" << format_bytes(mem) << endl;
     }
 
@@ -163,7 +163,7 @@ void compare_storage_types(const vector<flight> &all_flights) {
         results.push_back({"unordered_set", insert_time, search_time, mem});
 
         cout << "  Время вставки: " << fixed << setprecision(3) << insert_time << " сек" << endl;
-        cout << "  Время поиска (1000 операций): " << fixed << setprecision(6) << search_time << " сек" << endl;
+        cout << "  Время поиска: " << fixed << setprecision(6) << search_time << " сек" << endl;
         cout << "  Память: ~" << format_bytes(mem) << endl;
     }
 
@@ -410,14 +410,6 @@ void compare_reading_methods(const string &csv_file, size_t max_lines = 0) {
         cout << endl;
     }
 
-    if (!results.empty()) {
-        auto fastest = min_element(results.begin(), results.end(),
-                                   [](const ReadingResult &a, const ReadingResult &b) {
-                                       if (!a.success) return false;
-                                       if (!b.success) return true;
-                                       return a.time_seconds < b.time_seconds;
-                                   });
-    }
 }
 
 void compare_sorting_algorithms(const vector<flight> &test_data) {
@@ -443,10 +435,11 @@ void compare_sorting_algorithms(const vector<flight> &test_data) {
         results.push_back({"mergeSortByArrivalDelay", elapsed, true});
         cout << "  Время: " << fixed << setprecision(3) << elapsed << " сек" << endl;
 
-        cout << "  Первые 3: ";
-        for (size_t i = 0; i < min(size_t(3), data_copy.size()); ++i) {
+        cout << "  Рейсы:\n";
+        for (size_t i = 0; i < min(static_cast<size_t>(3), data_copy.size()); ++i) {
             if (i > 0) cout << ", ";
-            cout << data_copy[i].get_arr_delay() << " мин";
+            cout << data_copy[i].get_arr_delay() << " мин"
+                    << ", рейс:" << data_copy[i].get_unique_key();
         }
         cout << endl;
     }
@@ -462,11 +455,12 @@ void compare_sorting_algorithms(const vector<flight> &test_data) {
         results.push_back({"specialFlightSort", elapsed, true});
         cout << "  Время: " << fixed << setprecision(3) << elapsed << " сек" << endl;
 
-        cout << "  Первые 3: ";
-        for (size_t i = 0; i < min(size_t(3), data_copy.size()); ++i) {
+        cout << "  Рейсы:\n";
+        for (size_t i = 0; i < min(static_cast<size_t>(3), data_copy.size()); ++i) {
             if (i > 0) cout << ", ";
             cout << "отм:" << (data_copy[i].is_canceled() ? "да" : "нет")
-                    << " зад:" << data_copy[i].get_arr_delay() << "мин";
+                    << " зад:" << data_copy[i].get_arr_delay() << "мин"
+                    << ", рейс:" << data_copy[i].get_unique_key();
         }
         cout << endl;
     }
@@ -493,7 +487,7 @@ void compare_sorting_algorithms(const vector<flight> &test_data) {
                 << setw(15) << fixed << setprecision(3) << r.time_seconds;
 
         if (r.name == fastest_name) {
-            cout << "★ САМЫЙ БЫСТРЫЙ";
+            cout << "САМЫЙ БЫСТРЫЙ";
         } else {
             double ratio = r.time_seconds / fastest_time;
             cout << fixed << setprecision(2) << ratio << "x медленнее";
@@ -621,7 +615,7 @@ int main() {
 
     // Размер выборки для ТЕСТИРОВАНИЯ сортировки и поиска
     // (загрузка данных будет БЕЗ ограничения)
-    const size_t TEST_SAMPLE_SIZE = 100000;
+    const size_t TEST_SAMPLE_SIZE = 1000000;
 
     // Сравнение методов чтения (на выборке для ускорения)
     compare_reading_methods(CSV_FILE, TEST_SAMPLE_SIZE);
@@ -631,7 +625,7 @@ int main() {
     cout << "Загружается весь файл..." << endl;
 
     auto load_start = steady_clock::now();
-    auto flights = read_flights_by_instances(CSV_FILE, true, 0); // 0 = без ограничения
+    auto flights = read_flights_by_strings(CSV_FILE, true, 0); // 0 = без ограничения
     auto load_end = steady_clock::now();
     double load_time = duration_cast<milliseconds>(load_end - load_start).count() / 1000.0;
 

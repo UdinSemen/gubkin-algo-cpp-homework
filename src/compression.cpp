@@ -28,7 +28,7 @@ void compressFileStreaming(const std::string& input_file,
         // Сжимаем блок
         auto compressed = compressor.compress(block);
 
-        // ВАЖНО: Сохраняем ОБА размера - оригинального и сжатого блока
+        // Сохраняем 2 размера - оригинального и сжатого блока
         uint32_t original_size = static_cast<uint32_t>(bytes_read);
         uint32_t compressed_size = static_cast<uint32_t>(compressed.size());
 
@@ -38,7 +38,7 @@ void compressFileStreaming(const std::string& input_file,
                  compressed.size());
 
         total_original += bytes_read;
-        total_compressed += compressed.size() + 8; // +8 для двух uint32_t
+        total_compressed += compressed.size() + 8;
         block_num++;
 
         if (block_num % 50 == 0 || bytes_read < BLOCK_SIZE) {
