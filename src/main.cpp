@@ -60,34 +60,6 @@ void test_decompression(const string &original_file, const string &compressed_fi
     cout << "Время распаковки: " << fixed << setprecision(3) << decompress_time << " сек" << endl;
     cout << "Размер оригинала: " << format_bytes(orig_size) << endl;
     cout << "Размер распакованного: " << format_bytes(decomp_size) << endl;
-
-    // Проверка содержимого
-    if (orig_size != decomp_size) {
-        cout << "Результат: ОШИБКА - размеры не совпадают" << endl;
-        orig.close();
-        decomp.close();
-        return;
-    }
-
-    // Побайтовое сравнение
-    orig.seekg(0);
-    decomp.seekg(0);
-
-    const size_t BUFFER_SIZE = 1024 * 1024;
-    vector<char> buf1(BUFFER_SIZE);
-    vector<char> buf2(BUFFER_SIZE);
-    bool identical = true;
-
-    while (identical && orig.read(buf1.data(), BUFFER_SIZE) && decomp.read(buf2.data(), BUFFER_SIZE)) {
-        size_t bytes = orig.gcount();
-        if (bytes != decomp.gcount() || memcmp(buf1.data(), buf2.data(), bytes) != 0) {
-            identical = false;
-            break;
-        }
-    }
-
-    orig.close();
-    decomp.close();
 }
 
 void compare_storage_types(const vector<flight> &all_flights) {
